@@ -1,28 +1,37 @@
 <template>
     <div>
-        <h1>TODOLIST</h1>
-        <div class="app__main-input">
-            <div>
-                <input @keydown.ENTER="editManager.status ? editTodo() :addTodo()" v-model="text" type="text" class="input">
-                <input type="text" class="input inp" v-model="tagList">
+        <div class="container">
+            <div class="inputs-container">
+                <div class="add-inputs">
+                    <div>
+                        <h2>Add todo</h2>
+                        <label>Your todo:</label>
+                        <textarea @keydown.enter="editManager.status ? editTodo() :addTodo()" 
+                               v-model="text" 
+                               type="text" 
+                        ></textarea>
+                        <label>Your tags (specify them through the space):</label>
+                        <input type="text" v-model="tagList">
+                    </div>
+                    <div class="btns">
+                        <button v-if="!editManager.status" @click="addTodo">Add todo</button>
+                        <button v-else @click="editTodo">Save changes</button>
+                    </div>
+                </div>
+                <div class="search-inputs">
+                    <input v-model="search" type="text" class="input" placeholder="Search">
+                </div>
             </div>
-            <div>
-                <button v-if="!editManager.status" @click="addTodo">add todo</button>
-                <button v-else @click="editTodo">edit</button>
+            <div class="content-container">
+                <Todo 
+                    v-for="(todo, index) in filtredTodos" 
+                    :content="todo" 
+                    :key="todo.message"
+                    @remove-todo="remove(index)"
+                    @edit-todo="edit">
+                </Todo>
             </div>
-        </div>
-        <div class="app__main-input">
-            <input v-model="search" type="text" class="input" placeholder="search">
-        </div>
-        <ul>
-            <Todo 
-                v-for="(todo, index) in filtredTodos" 
-                :content="todo" 
-                :key="todo.message"
-                @remove-todo="remove(index)"
-                @edit-todo="edit">
-            </Todo>
-        </ul>
+        </div>    
     </div>
 </template>
 
@@ -61,7 +70,6 @@ export default {
                     tags: todo.tags.concat(this.findTags(todo.message))
                 }
             });
-            console.log(this.todos)
         } catch(e) {
             console.error(e);
         }
@@ -129,69 +137,106 @@ export default {
             return tagsFromMessage;
         },
         findTags(str) {
-            if (!str.match(/#\w+/ig)) return new Array(0);
+            if (!str.match(/#\w+/ig) || !str.match(/#\[а-яА-Я0-9]+/ig)) return new Array(0);
             return str.match(/#\w+/ig);
         },
-        // fetchData() {
-            
-        // }
     }
 }
 </script>
 
 
 <style lang="scss" >
+
+    $firstColor: rgb(42, 148, 74);
+    $secondColor: #f3f2f27e;
+    $fontColor: #2c3e50;
+
     *,
     *:before,
     *:after {
         margin: 0;
         padding: 0;
     }
-
     * {
         box-sizing: inherit;
     }
-
     body {
-        box-sizing: border-box
+        outline: none;
+        box-sizing: border-box;
+        background-color: $secondColor;
     }
-
-    #app {
-        width: 100%;
-        max-width: 500px;
-        margin: 0 auto;
-    }
-
-    h1 {
-        margin-bottom: 5px;
-    }
-
-    .app__main-input {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-    }
-
-    .input {
-        display: block;
-        max-width: 100%;
-        padding: 2px 10px;
-    }
-
-    button {
-        padding: 2px 10px;
-        background-color: transparent;
-        color: #000;
-        border: 1px solid #000;
-        cursor: pointer;
-        transition: all .3s ease;
-    }
-
-    button:hover {
-        background-color: #000;
-        color: #fff
-    }
-    .inp {
-        display: block;
+    .container {
+        max-width: 900px;
+        margin: auto;
+        margin-top: 20px;
+        .inputs-container {
+            display: flex;
+            justify-content: space-between;
+            .add-inputs {
+                width: 40%;
+                h2 {
+                    margin-bottom: 10px;
+                }
+                label: {
+                    font-size: 15px;
+                }
+                textarea, input{
+                    font-size: 15px;
+                    outline: none;
+                    width: 100%;
+                    border: 0;
+                    border-bottom: 2px solid $fontColor;
+                    display: block;
+                    padding: 10px 5px;
+                    margin-bottom: 15px;
+                    transition: .2s;
+                    background-color:$secondColor;
+                }
+                textarea {
+                    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    resize: vertical;
+                }
+                input:focus, textarea:focus {
+                    border-bottom: 2px solid $firstColor;
+                }
+                .btns button{
+                    width: 100%;
+                    height: 40px;
+                    text-align: center;
+                    padding: 2px 10px;
+                    background-color: $firstColor;
+                    color: #fff;
+                    cursor: pointer;
+                    transition: all .3s ease;
+                    border: transparent;
+                    font-size: 15px;
+                    &:hover {
+                        background-color: rgb(27, 97, 48);
+                    }
+                }
+            }
+            .search-inputs {
+                input {
+                    outline: none;
+                    padding: 2px 10px;
+                    border-radius: 50px;
+                    border: 1.5px solid $fontColor;
+                    width: 250px;
+                    height: 30px;
+                    background-color: $secondColor;
+                    &:focus {
+                        border: 1.5px solid $firstColor;
+                        background-color: #fff;
+                    }
+                }               
+            }
+        }
+        .content-container {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-between;
+        }
     }
 </style>
