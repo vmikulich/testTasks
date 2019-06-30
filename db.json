@@ -1,0 +1,12 @@
+{
+  "todos": [
+    {
+        "message": "Go to #shop.",
+        "tags": ["#milk", "#bread"]
+    },
+    {
+        "message": "Finish homework.",
+        "tags": ["#math", "#english"]
+    }
+  ]
+}
