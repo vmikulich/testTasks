@@ -137,8 +137,8 @@ export default {
             return tagsFromMessage;
         },
         findTags(str) {
-            if (!str.match(/#\w+/ig) || !str.match(/#\[а-яА-Я0-9]+/ig)) return new Array(0);
-            return str.match(/#\w+/ig);
+            if (!str.match(/#[\wа-яё]+/ig)) return new Array(0);
+            return str.match(/#[\wа-яё]+/ig);
         },
     }
 }

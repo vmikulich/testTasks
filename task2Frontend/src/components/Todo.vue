@@ -112,7 +112,7 @@ export default {
                 .tag {
                     margin: 0 10px 5px 0;
                     padding: 3px;
-                    background-color: rgba(83, 188, 248, 0.432);
+                    background-color: rgba(89, 190, 248, 0.349);
                     border-radius: 7px;
                     font-size: 13px;
                     button {
