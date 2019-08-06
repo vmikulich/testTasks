@@ -129,8 +129,8 @@ export default {
             if ( this.tagList !== '') {
                 const tags = this.tagList.split(' ');
                 tags.forEach(tag => {
-                    if (!tagsFromMessage.includes(tag)) {
-                        tagsFromMessage.push(tag);
+                    if (!tagsFromMessage.includes(tag) && tag !== '') {
+                        this.isWithLattice(tag) ? tagsFromMessage.push('#' + tag) : tagsFromMessage.push(tag);
                     }
                 })
             }
@@ -140,6 +140,9 @@ export default {
             if (!str.match(/#[\wа-яё]+/ig)) return new Array(0);
             return str.match(/#[\wа-яё]+/ig);
         },
+        isWithLattice(str) {
+            return str.match(/#/) === null;
+        }
     }
 }
 </script>
